@@ -1,7 +1,6 @@
-// theme.js
+// theme.js (Lanst Version - Son Hali)
 
-// Color palette for light and dark modes
-// Açık ve koyu modlar için renk paleti
+// Color palette
 export const COLORS = {
   light: {
     bg: '#FFFFFF',
@@ -17,8 +16,6 @@ export const COLORS = {
   },
 };
 
-// Standard spacing values
-// Standart boşluk değerleri
 export const SPACING = {
   sm: 8,
   md: 16,
@@ -26,17 +23,19 @@ export const SPACING = {
   xl: 32,
 };
 
-// Border radius values
-// Kenar yuvarlama değerleri
 export const RADII = {
   sm: 8,
   md: 12,
   lg: 20,
 };
 
-// Font family references
-// Font ailesi referansları
 export const FONTS = {
   regular: 'Montserrat',
   bold: 'MontserratBold',
+};
+
+// Size of already added pictur / Yeni eklenen görsel boyutları
+export const SIZES = {
+  profileImageSmall: 100, // For phones / Telefonlar için
+  profileImageLarge: 140, // For Tablets / Tabletler için
 };

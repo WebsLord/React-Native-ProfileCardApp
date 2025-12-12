@@ -1,20 +1,24 @@
-// screens/ProfileScreen.js
+// screens/ProfileScreen.js (Last Verison - Son Hali)
 
-import { View, Text, StyleSheet, Pressable, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, Pressable, useWindowDimensions, Image } from 'react-native';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SPACING, RADII, FONTS } from '../theme';
+import { COLORS, SPACING, RADII, FONTS, SIZES } from '../theme';
+
+// Import the local image
+const profileImage = require('../assets/picture.jpeg');
 
 export default function ProfileScreen() {
   const [theme, setTheme] = useState('light');
   const currentTheme = COLORS[theme];
   
   // Get window width for responsive design
-  // Responsive tasarım için ekran genişliğini al
   const { width } = useWindowDimensions();
   // Check if the screen width is greater than 500px (e.g., tablet)
-  // Ekran genişliğinin 500px'den büyük olup olmadığını kontrol et (örn: tablet)
   const isLargeScreen = width > 500;
+
+  // Determine profile image size based on screen width
+  const profileImageSize = isLargeScreen ? SIZES.profileImageLarge : SIZES.profileImageSmall;
 
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
@@ -22,6 +26,8 @@ export default function ProfileScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.bg }]}>
+      
+      {/* Theme Toggle Button */}
       <Pressable onPress={toggleTheme} style={styles.themeToggle}>
         <Ionicons 
           name={theme === 'light' ? 'moon' : 'sunny'} 
@@ -35,18 +41,24 @@ export default function ProfileScreen() {
           { 
               backgroundColor: currentTheme.card,
               // Adjust width and padding based on screen size
-              // Ekran boyutuna göre genişlik ve dolguyu ayarla
               width: isLargeScreen ? '60%' : '85%',
               padding: isLargeScreen ? SPACING.xl : SPACING.lg 
           }
       ]}>
-        <Ionicons 
-            name="person-circle-outline" 
-            // Make icon larger on tablets/desktops
-            // Tablet/masaüstü cihazlarda ikonu büyüt
-            size={isLargeScreen ? 100 : 80} 
-            color={currentTheme.text} 
+        
+        {/* Profile Image Component */}
+        <Image
+          source={profileImage}
+          style={[
+            styles.profileImage, 
+            { 
+              width: profileImageSize, 
+              height: profileImageSize,
+              borderRadius: profileImageSize / 2 // Make it round
+            }
+          ]}
         />
+        
         <Text style={[styles.name, { color: currentTheme.text }]}>
           Efe Yaşar
         </Text>
@@ -54,6 +66,7 @@ export default function ProfileScreen() {
           Student / Developer
         </Text>
 
+        {/* Interactive Like Button */}
         <Pressable 
             style={({pressed}) => [
                 styles.likeButton,
@@ -83,8 +96,6 @@ const styles = StyleSheet.create({
     padding: SPACING.sm,
   },
   card: {
-    // Width and padding are now handled dynamically in the component
-    // Genişlik ve dolgu artık bileşen içinde dinamik olarak yönetiliyor
     borderRadius: RADII.md,
     alignItems: 'center',
     shadowColor: '#000',
@@ -92,6 +103,11 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 4 },
     elevation: 6,
+  },
+  // New style for the profile image
+  profileImage: {
+    marginBottom: SPACING.sm, // Add some space below the image
+    resizeMode: 'cover',
   },
   name: {
     fontFamily: FONTS.bold,
