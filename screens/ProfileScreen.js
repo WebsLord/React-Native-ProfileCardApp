@@ -1,6 +1,6 @@
 // screens/ProfileScreen.js
 
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, useWindowDimensions } from 'react-native';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, RADII, FONTS } from '../theme';
@@ -8,18 +8,20 @@ import { COLORS, SPACING, RADII, FONTS } from '../theme';
 export default function ProfileScreen() {
   const [theme, setTheme] = useState('light');
   const currentTheme = COLORS[theme];
+  
+  // Get window width for responsive design
+  // Responsive tasarım için ekran genişliğini al
+  const { width } = useWindowDimensions();
+  // Check if the screen width is greater than 500px (e.g., tablet)
+  // Ekran genişliğinin 500px'den büyük olup olmadığını kontrol et (örn: tablet)
+  const isLargeScreen = width > 500;
 
-  // Function to toggle between light and dark modes
-  // Açık ve koyu modlar arasında geçiş yapma fonksiyonu
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.bg }]}>
-      
-      {/* Theme Toggle Button (Top Right) */}
-      {/* Tema Değiştirme Butonu (Sağ Üst) */}
       <Pressable onPress={toggleTheme} style={styles.themeToggle}>
         <Ionicons 
           name={theme === 'light' ? 'moon' : 'sunny'} 
@@ -28,10 +30,21 @@ export default function ProfileScreen() {
         />
       </Pressable>
 
-      <View style={[styles.card, { backgroundColor: currentTheme.card }]}>
+      <View style={[
+          styles.card, 
+          { 
+              backgroundColor: currentTheme.card,
+              // Adjust width and padding based on screen size
+              // Ekran boyutuna göre genişlik ve dolguyu ayarla
+              width: isLargeScreen ? '60%' : '85%',
+              padding: isLargeScreen ? SPACING.xl : SPACING.lg 
+          }
+      ]}>
         <Ionicons 
             name="person-circle-outline" 
-            size={80} 
+            // Make icon larger on tablets/desktops
+            // Tablet/masaüstü cihazlarda ikonu büyüt
+            size={isLargeScreen ? 100 : 80} 
             color={currentTheme.text} 
         />
         <Text style={[styles.name, { color: currentTheme.text }]}>
@@ -41,13 +54,9 @@ export default function ProfileScreen() {
           Student / Developer
         </Text>
 
-        {/* Interactive Like Button */}
-        {/* Etkileşimli Beğen Butonu */}
         <Pressable 
             style={({pressed}) => [
                 styles.likeButton,
-                // Change background color when pressed for feedback
-                // Geri bildirim için basıldığında arkaplan rengini değiştir
                 { backgroundColor: pressed ? '#e63946' : '#ff6b6b' }
             ]}
             onPress={() => console.log('Profile Liked!')}
@@ -74,10 +83,10 @@ const styles = StyleSheet.create({
     padding: SPACING.sm,
   },
   card: {
-    width: '85%',
+    // Width and padding are now handled dynamically in the component
+    // Genişlik ve dolgu artık bileşen içinde dinamik olarak yönetiliyor
     borderRadius: RADII.md,
     alignItems: 'center',
-    padding: SPACING.lg,
     shadowColor: '#000',
     shadowOpacity: 0.15,
     shadowRadius: 8,
