@@ -1,6 +1,6 @@
-// screens/ProfileScreen.js (Last Verison - Son Hali)
+// screens/ProfileScreen.js
 
-import { View, Text, StyleSheet, Pressable, useWindowDimensions, Image } from 'react-native';
+import { View, Text, StyleSheet, Pressable, useWindowDimensions, Image, Linking } from 'react-native';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, RADII, FONTS, SIZES } from '../theme';
@@ -14,7 +14,6 @@ export default function ProfileScreen() {
   
   // Get window width for responsive design
   const { width } = useWindowDimensions();
-  // Check if the screen width is greater than 500px (e.g., tablet)
   const isLargeScreen = width > 500;
 
   // Determine profile image size based on screen width
@@ -22,6 +21,11 @@ export default function ProfileScreen() {
 
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  // Function to open LinkedIn URL
+  const openLinkedIn = () => {
+    Linking.openURL('https://www.linkedin.com/in/efeysr/');
   };
 
   return (
@@ -40,7 +44,6 @@ export default function ProfileScreen() {
           styles.card, 
           { 
               backgroundColor: currentTheme.card,
-              // Adjust width and padding based on screen size
               width: isLargeScreen ? '60%' : '85%',
               padding: isLargeScreen ? SPACING.xl : SPACING.lg 
           }
@@ -54,7 +57,7 @@ export default function ProfileScreen() {
             { 
               width: profileImageSize, 
               height: profileImageSize,
-              borderRadius: profileImageSize / 2 // Make it round
+              borderRadius: profileImageSize / 2
             }
           ]}
         />
@@ -66,16 +69,17 @@ export default function ProfileScreen() {
           Student / Developer
         </Text>
 
-        {/* Interactive Like Button */}
+        {/* LinkedIn Button (Updated) */}
         <Pressable 
             style={({pressed}) => [
-                styles.likeButton,
-                { backgroundColor: pressed ? '#e63946' : '#ff6b6b' }
+                styles.socialButton,
+                // LinkedIn Brand Colors: Normal #0077b5, Pressed #004182
+                { backgroundColor: pressed ? '#004182' : '#0077b5' }
             ]}
-            onPress={() => console.log('Profile Liked!')}
+            onPress={openLinkedIn}
         >
-            <Ionicons name="heart" size={24} color="#fff" />
-            <Text style={styles.likeText}>Like</Text>
+            <Ionicons name="logo-linkedin" size={24} color="#fff" />
+            <Text style={styles.socialText}>Connect</Text>
         </Pressable>
 
       </View>
@@ -104,9 +108,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     elevation: 6,
   },
-  // New style for the profile image
   profileImage: {
-    marginBottom: SPACING.sm, // Add some space below the image
+    marginBottom: SPACING.sm,
     resizeMode: 'cover',
   },
   name: {
@@ -120,7 +123,8 @@ const styles = StyleSheet.create({
     marginTop: SPACING.sm,
     opacity: 0.7,
   },
-  likeButton: {
+  // Updated styles for the social button
+  socialButton: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: SPACING.sm,
@@ -128,7 +132,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginTop: SPACING.md,
   },
-  likeText: {
+  socialText: {
     color: '#fff',
     fontFamily: FONTS.bold,
     fontSize: 16,
